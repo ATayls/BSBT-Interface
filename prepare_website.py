@@ -196,7 +196,7 @@ def run_clustering(df):
             df.loc[mask, 'cluster_id'] = next_cluster_id()
         else:
             # Partition space by vertical and horizontal half splits
-            df[mask] = split_in_half(df[mask], cluster_size)
+            df.loc[mask] = split_in_half(df[mask], cluster_size)
 
     df.to_file("clusters.shp")
     return df
@@ -220,7 +220,7 @@ def split_in_half(df, max_cluster_size):
 
     df.loc[g1.index, 'cluster_id'] = next_cluster_id()
     df.loc[g2.index, 'cluster_id'] = next_cluster_id()
-    return df
+    return df.sort_index()
 
 
 def create_database(dataframe):
