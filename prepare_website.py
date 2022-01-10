@@ -80,6 +80,10 @@ def load_shapefile(args):
     print('\t[Label] {}'.format(col_label))
     print('\t[Geometry] {}'.format(col_geom))
 
+    if col_idx == col_label:
+        df["__temp__"] = df[col_idx]
+        col_label = "__temp__"
+
     #df.set_index(col_idx, inplace=True)
     df.rename(columns={col_idx: 'chosen_id', col_label: 'name'}, inplace=True)
     df.reset_index(inplace=True)
@@ -111,7 +115,7 @@ def generate_region_images(df_row):
     df_row.plot(ax=ax, facecolor="none", edgecolor="red", lw=1)
     ctx.add_basemap(ax,
                     crs=df_row.geometry.crs.to_string(),
-                    source=ctx.providers.Esri.NatGeoWorldMap,
+                    source=ctx.providers.OpenStreetMap.Mapnik,
                     attribution='')
     plt.axis('off')
 
@@ -148,9 +152,9 @@ def generate_cluster_images(data):
     df = df.dissolve(by='cluster_id')
 
     df.plot(ax=ax, facecolor="none", edgecolor="red", lw=1)
-    ctx.add_basemap(ax, 
-            source=ctx.providers.Esri.NatGeoWorldMap,
-            crs=df.crs.to_string(), 
+    ctx.add_basemap(ax,
+            source=ctx.providers.OpenStreetMap.Mapnik,
+            crs=df.crs.to_string(),
             attribution='')  #, zoom=12)
     plt.axis('off')
 
