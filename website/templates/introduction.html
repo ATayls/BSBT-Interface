@@ -1,0 +1,40 @@
+{% extends "layout.html" %}
+
+{% block content %}
+
+<div class="card m-5" xmlns="http://www.w3.org/1999/html">
+    <div class="card-body text-center">
+        <h1 class="card-title">Comparative Judgement Survey</h1>
+        <br>
+        <h2>Forced marriage in Nottinghamshire</h2>
+
+        <p class="m-3 text-left">
+            This aim of this study is to rank the wards in Nottinghamshire by rate of forced marriage.
+            In this study you will be shown pairs of wards (both city and county) in Nottinghamshire and
+            asked to choose <b>which ward has the higher rate of forced marriage</b>. Your participation
+            should take around 10 minutes.
+        </p>
+        <br>
+        <div class="m-3">
+            <h3 class="mb-3"> Instructions </h3>
+            <ol class="text-left">
+                <li class="mb-3">You will be shown a pair of wards. Please click the picture of the ward which has the higher rate of forced marriage. Once you are happy with your choice, please click confirm.</li>
+
+                <li class="mb-3">If your are unfamiliar with one of the wards, please click ‘I don’t know’ above the picture of the ward. You will not be asked about this ward again.</li>
+
+                <li class="mb-3">If you cannot compare the pair of wards shown, please click skip on the right of the screen.</li>
+
+                <li class="mb-3">We ask you do 30 comparisons. Once you have finished, click finish in the top right of the screen.</li>
+            </ol>
+        </div>
+
+
+        <p class="m-3"> Please email any questions to </p>
+
+    </div>
+    <form class="card-footer text-muted mx-auto bg-white border-top-0" action="{{ url_for('views.register_user') }}" method="POST">
+        <button type="submit" class="btn btn-sm btn-outline-secondary bg-dark text-white">Continue</button>
+    </form>
+</div>
+
+{% endblock %}

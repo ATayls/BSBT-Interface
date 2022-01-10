@@ -3,8 +3,14 @@ from flask import (Blueprint, redirect, render_template, request, session,
 from website.extensions import db
 from website.models import User, Ranking, KnownRegion, UnknowRegion, Cluster, Region, SkippedRanking
 import random
+import uuid
 
 blueprint = Blueprint('views', __name__)
+
+@blueprint.route('/')
+def intro():
+    session.clear()
+    return render_template('introduction.html')
 
 
 @blueprint.route('/rank')
@@ -28,15 +34,23 @@ def rank(rid1=None, rid2=None):
     return render_template('ranking_interface.html', r1=r1, r2=r2)
 
 
-@blueprint.route('/', methods=['GET', 'POST'])
 @blueprint.route('/register', methods=['GET', 'POST'])
 def register_user():
     session.clear()
     if request.method == 'POST':
-        name = request.form['name'].replace("'", "")
-        age = request.form['age']
-        gender = request.form['gender']
-        occ = request.form['occupation']
+
+        # Defaults for blank form
+        name = str(uuid.uuid1())
+        age, gender, occ = 0, "na", "na"
+
+        if 'name' in request.form:
+            name = request.form['name'].replace("'", "")
+        if 'age' in request.form:
+            age = request.form['age']
+        if 'gender' in request.form:
+            gender = request.form['gender']
+        if 'occ' in request.form:
+            occ = request.form['occupation']
 
         user = User(name=name, age=age, gender=gender, occupation=occ)
         db.session.add(user)
@@ -115,7 +129,7 @@ def logout():
     print(session.keys())
     session.clear()
     print(session.keys())
-    return redirect(url_for('.register_user'))
+    return redirect(url_for('.intro'))
 
 
 @blueprint.route('/selection/clusters')
