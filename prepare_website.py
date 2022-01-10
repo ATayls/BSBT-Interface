@@ -25,9 +25,10 @@ def next_cluster_id():
     return CLUSTER_ID
 
 
-def choose_column(df):
+def choose_column(df, unique=True):
     id_candidates = df.select_dtypes(exclude=['geometry']).columns
-    id_candidates = [x for x in id_candidates if df[x].is_unique]
+    if unique:
+        id_candidates = [x for x in id_candidates if df[x].is_unique]
     longest = max([len(x) for x in id_candidates])
 
     print('--\tColumn Name\tExample')
@@ -73,7 +74,7 @@ def load_shapefile(args):
     )
     col_label = None
     while col_label is None:
-        col_label = choose_column(df)
+        col_label = choose_column(df, unique=False)
 
     print('\n\n\nSummary of selected columns:')
     print('\t[ID] {}'.format(col_idx))
