@@ -1,8 +1,10 @@
 from flask import (Blueprint, redirect, render_template, request, session,
                    url_for, current_app)
 from website.extensions import db
-from website.models import User, Ranking, KnownRegion, UnknowRegion, Cluster, Region, SkippedRanking
+from website.models import (User, Ranking, KnownRegion, UnknowRegion, Cluster, Region,
+                            SkippedRanking, ComparisonProbability)
 import random
+import numpy as np
 import uuid
 
 blueprint = Blueprint('views', __name__)
@@ -22,11 +24,23 @@ def rank(rid1=None, rid2=None):
 
         session['user_region_bucket'] = [x.region_id for x in kw]
 
-    r1_id = random.choice(session['user_region_bucket'])
+    if current_app.config["USE_PROBABILITIES"]:
+        id_list = [r[0] for r in ComparisonProbability.query.values(ComparisonProbability.id)]
+        probability_list = [r[0] for r in ComparisonProbability.query.values(ComparisonProbability.probability)]
+        pairing_id = int(np.random.choice(id_list, p=probability_list))
+        pair = ComparisonProbability.query.filter_by(id=pairing_id).first()
+        # TODO. Currently Assuming ALL_CLUSTERS_KNOWN in config otherwise this assert may be hit
+        # Will have to handle differently if using known region selection.
+        assert (pair.region1_id in session['user_region_bucket'])
+        assert (pair.region2_id in session['user_region_bucket'])
+        r1_id = pair.region1_id
+        r2_id = pair.region2_id
 
-    sublist = session['user_region_bucket'].copy()
-    sublist.remove(r1_id)
-    r2_id = random.choice(sublist)
+    else:
+        r1_id = random.choice(session['user_region_bucket'])
+        sublist = session['user_region_bucket'].copy()
+        sublist.remove(r1_id)
+        r2_id = random.choice(sublist)
 
     r1 = Region.query.filter_by(id=r1_id).first()
     r2 = Region.query.filter_by(id=r2_id).first()
