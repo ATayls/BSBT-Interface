@@ -1,5 +1,6 @@
 import os
 import shutil
+from itertools import combinations
 import sqlite3
 import argparse
 import pandas as pd
@@ -91,6 +92,26 @@ def load_shapefile(args):
     df.index = df.index + 1
 
     return df[['chosen_id', 'name', col_geom]]
+
+
+def load_probabilities(filepath: str, chosen_ids: list):
+    df = pd.read_csv(args.probability_csv)
+    # Basic assertion checks
+    error = False
+    csv_combinations = [tuple(r) for r in df.iloc[:,0:2].to_records(index=False)]
+    chosen_combinations = [items for items in combinations(chosen_ids, r=2)]
+    for region_pair in chosen_combinations:
+        if region_pair in csv_combinations:
+            continue
+        elif (region_pair[1], region_pair[0]) in csv_combinations:
+            continue
+        else:
+            print(f"Region Pair {region_pair} not found in Probability csv")
+            error = True
+    if error:
+        raise IOError("Input Probability regions do not match selected unique identifiers")
+    return df
+
 
 
 def generate_region_images(df_row):
@@ -267,6 +288,13 @@ if __name__ == '__main__':
                         default=False)
     parser.add_argument('--max-cluster-size', action='store', default=5)
 
+    parser.add_argument('probability_csv',
+                        metavar='probability_csv',
+                        type=str,
+                        help='a csv file containing the probability of region comparisons',
+                        default='')
+
+
     args = parser.parse_args()
     print('\n\n\n')
 
@@ -278,6 +306,13 @@ if __name__ == '__main__':
 
     # Load Shapefile
     df = load_shapefile(args)
+
+    # Load probabilities
+    if args.probability_csv:
+        prob_df = load_probabilities(args.probability_csv, list(df["chosen_id"]))
+    else:
+        prob_df = None
+
 
     # Check if clustering should be applied
     if len(df) > 25 and not args.disable_clustering:
