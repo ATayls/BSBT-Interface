@@ -5,6 +5,7 @@ class DevConfig(object):
     DEBUG = True
     SQLALCHEMY_DATABASE_URI='sqlite:///../comparative_judgements.db'
     SQLALCHEMY_TRACK_MODIFICATIONS = False
+    ALL_CLUSTERS_KNOWN = True
 
 
 class ProdConfig(object):

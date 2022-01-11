@@ -1,5 +1,5 @@
 from flask import (Blueprint, redirect, render_template, request, session,
-                   url_for)
+                   url_for, current_app)
 from website.extensions import db
 from website.models import User, Ranking, KnownRegion, UnknowRegion, Cluster, Region, SkippedRanking
 import random
@@ -134,6 +134,13 @@ def logout():
 
 @blueprint.route('/selection/clusters')
 def known_clusters_selection():
+    if current_app.config['ALL_CLUSTERS_KNOWN']:
+        for r in Region.query.all():
+            r = KnownRegion(user_id=session['user_id'], region_id=r.id)
+            db.session.add(r)
+            db.session.commit()
+        return redirect(url_for('.rank'))
+
     if 'clusters' not in session:
         session['clusters'] = [
             x[0] for x in db.session.query(Cluster.id).distinct().all()
