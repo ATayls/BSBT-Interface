@@ -93,3 +93,11 @@ class KnownRegion(db.Model):
         'User', backref=db.backref('known_regions', lazy=True))
     bcluster = db.relationship(
         'Region', backref=db.backref('known_by_users', lazy=True))
+
+class ComparisonProbability(db.Model):
+    __tablename__ = 'comparison_probabilities'
+
+    id = db.Column(db.Integer, primary_key=True)
+    region1_id = db.Column(db.Integer, db.ForeignKey('regions.id'), nullable=False)
+    region2_id = db.Column(db.Integer, db.ForeignKey('regions.id'), nullable=False)
+    probability = db.Column(db.Float, nullable=False)

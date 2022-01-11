@@ -10,7 +10,7 @@ import matplotlib.pyplot as plt
 
 from website import create_app
 from website.extensions import db
-from website.models import Cluster, Region
+from website.models import Cluster, Region, ComparisonProbability
 
 from shapely.geometry.multipolygon import MultiPolygon
 from tqdm.contrib.concurrent import process_map
@@ -95,7 +95,7 @@ def load_shapefile(args):
 
 
 def load_probabilities(filepath: str, chosen_ids: list):
-    df = pd.read_csv(args.probability_csv)
+    df = pd.read_csv(filepath)
     # Basic assertion checks
     error = False
     csv_combinations = [tuple(r) for r in df.iloc[:,0:2].to_records(index=False)]
@@ -249,7 +249,7 @@ def split_in_half(df, max_cluster_size):
     return df.sort_index()
 
 
-def create_database(dataframe):
+def create_database(dataframe, probability_df=None):
     app = create_app()
 
     with app.app_context():
@@ -268,6 +268,19 @@ def create_database(dataframe):
                        name=row['name'],
                        cluster_id=row['cluster_id'])
             db.session.add(r)
+
+        if probability_df is not None:
+            for i, row in probability_df.iterrows():
+                region_1 = db.session.query(Region).filter_by(shapefile_id=row[0]).first()
+                region_2 = db.session.query(Region).filter_by(shapefile_id=row[1]).first()
+                c_p = ComparisonProbability(
+                    id=i,
+                    region1_id=region_1.id,
+                    region2_id=region_2.id,
+                    probability=row[2]
+                )
+                db.session.add(c_p)
+
         db.session.commit()
 
 
@@ -343,4 +356,4 @@ if __name__ == '__main__':
     # TODO Check all images were properly generated, maybe a simple file count?
 
     # Create Sqlite3 database
-    create_database(df)
+    create_database(df, prob_df)
