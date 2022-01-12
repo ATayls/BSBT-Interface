@@ -29,10 +29,11 @@ def rank(rid1=None, rid2=None):
         probability_list = [r[0] for r in ComparisonProbability.query.values(ComparisonProbability.probability)]
         pairing_id = int(np.random.choice(id_list, p=probability_list))
         pair = ComparisonProbability.query.filter_by(id=pairing_id).first()
-        # TODO. Currently Assuming ALL_CLUSTERS_KNOWN in config otherwise this assert may be hit
-        # Will have to handle differently if using known region selection.
-        assert (pair.region1_id in session['user_region_bucket'])
-        assert (pair.region2_id in session['user_region_bucket'])
+        # Redraw from sample if a region is unknown
+        if pair.region1_id not in session['user_region_bucket']:
+            return redirect(url_for('.rank'))
+        if pair.region2_id not in session['user_region_bucket']:
+            return redirect(url_for('.rank'))
         r1_id = pair.region1_id
         r2_id = pair.region2_id
 
