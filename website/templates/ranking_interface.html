@@ -12,6 +12,16 @@
     width: 100%;
 }
 
+.container {
+  display: flex;
+  justify-content: center;
+}
+
+.card {
+  width: 100%;
+  margin: 0 10px;
+}
+
 .richest {
   border-style: solid;
   border-width: 10px;
@@ -39,24 +49,24 @@
     </div>
   </div>
 
-  <div class="row pl-2 pr-2">
-    <div class="col p-2">
+  <div class="container">
+    <div class="card">
       <img id="left-image" data-swid={{ r1.id }} src= {{ url_for('static', filename = 'maps/region_' + r1.id|string + '.png') }} class="img-responsive">
     </div>
-    <div class="col p-2">
+    <div class="card">
       <img id="right-image" data-swid={{ r2.id }} src= {{ url_for('static', filename = 'maps/region_' + r2.id|string + '.png') }} class="img-responsive">
     </div>
   </div>
-
-  <div class="row pl-2 pr-2">
-    <div class="col-sm-4 p-2 text-left">
-      <a href="{{ url_for('.previous_ranking') }}" style="width:200px;" class="btn btn-outline-danger btn-lg">Previous</a>
+  <br>
+  <div class="container">
+    <div class="card text-left">
+      <a href="{{ url_for('.previous_ranking') }}" class="btn btn-outline-danger btn-lg">Previous</a>
     </div>
-    <div class="col-sm-4 p-2 text-center">
-      <button id="confirm-button" type="button" class="btn btn-primary disabled btn-lg" style="width:200px;" disabled>Confirm</button>
+    <div class="card text-center">
+      <button id="confirm-button" type="button" class="btn btn-primary disabled btn-lg" disabled>Confirm</button>
     </div>
-    <div class="col-sm-4 p-2 text-right">
-      <a href="{{ url_for('.skip_ranking', r1=r1.id, r2=r2.id) }}" class="btn btn-outline-danger btn-lg" style="width:200px;">Skip</a>
+    <div class="card text-right">
+      <a href="{{ url_for('.skip_ranking', r1=r1.id, r2=r2.id) }}" class="btn btn-outline-danger btn-lg" >Skip</a>
     </div>
   </div>
 
