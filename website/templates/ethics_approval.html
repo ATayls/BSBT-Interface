@@ -1,0 +1,68 @@
+{% extends "layout.html" %}
+
+{% block content %}
+
+<div class="card m-5" xmlns="http://www.w3.org/1999/html">
+    <div class="card-body m-2">
+        <h1 class="card-title text-center">Forced Marriage Prevalence Project: Privacy Notice and Informed Consent</h1>
+        <br>
+        <h3>Who are we?</h3>
+        <p>
+        We are a group of researchers at the University of Nottingham studying forced marriage in
+        the UK and around the world. We are interested in understanding the prevalence of forced
+        marriage in different regions of the UK.
+
+        At the moment there is no reliable base-line data about the prevalence of forced marriage
+        in the UK. This makes it very hard to judge whether government policies, or the actions of
+        specialist support services, police, social-services, local government, or schools (to name
+        just a few key actors in this field) are effectively helping to end this crime.
+        This project is designed as part of a process of securing this much-needed baseline data.
+
+        If you have any questions about the research, please contact
+            Dr Rowland Seymour (rowland.seymour@nottingham.ac.uk),
+            Dr Helen McCabe (helen.mccabe@nottingham.ac.uk_) or our Research Ethics Committee Chair
+            via graeme.doherty@nottingham.ac.uk.
+            Recent outputs from our existing work on forced marriage can be found at forcedmarriageresearch.ac.uk.
+        </p>
+        <h3>Why are you being asked to take part in this research?</h3>
+        <p>
+            We want to record your view of the likely risk of forced marriage in different regions
+            of the UK. You are being asked because you live and/or work or study in the UK. You may
+            also be an expert in this area, but we are also interested in your opinions even if you
+            don’t work in this area. Our research method relies on the “wisdom of the crowd”, so we
+            want to hear from everyone.
+        </p>
+        <h3>What will happen to the data you give</h3>
+        <p>
+        We are not asking for any personal information from you that could be used to identify you.
+        Your answers will be anonymous.
+
+        We will process the data you do give us about your perception of the prevalence and risk of
+        forced marriage in different regions in the UK in line with the
+        University’s data-handling policies. We will keep it for as long as we are working on
+        this topic. We will publish the dataset in an open-access repository so other
+        researchers can use it too in future.
+        </p>
+        <h3>Withdrawing from the project</h3>
+        <p>
+        At any point in this survey, you can close your web-browser.
+        If you do, your answers will not be submitted, and we won’t see them.
+        If you do press “finish” on the final page, your answers will be recorded.
+        As this is an anonymous survey, we can’t delete your answers after that point.
+        </p>
+        <h3>By clicking “I consent” you are agreeing to this use of the data you give us.</h3>
+        <p>
+        Many thanks for taking the time to complete our survey on this important topic.
+        You answers will help us understand the prevalence of forced marriage in the UK,
+        and hopefully build towards effective means of ending it by 2030 in line with the
+        Sustainable Development Goals.
+        </p>
+        <h4>The Forced Marriage Research Team, University of Nottingham Rights Lab.</h4>
+        <br>
+    </div>
+    <form class="card-footer text-muted mx-auto bg-white border-top-0" action="{{ url_for('views.register_user') }}" method="POST">
+        <button type="submit" style="width: 200px; height: 50px" class="btn btn-sm btn-outline-secondary bg-success text-white">I consent</button>
+    </form>
+</div>
+
+{% endblock %}

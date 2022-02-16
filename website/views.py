@@ -12,7 +12,7 @@ blueprint = Blueprint('views', __name__)
 @blueprint.route('/')
 def intro():
     session.clear()
-    return render_template('introduction.html')
+    return render_template('ethics_approval.html')
 
 
 @blueprint.route('/rank')
@@ -73,9 +73,9 @@ def register_user():
 
         session['user_id'] = user.id
 
-        return redirect(url_for('.known_clusters_selection'))
+        return render_template('introduction.html')
 
-    return render_template('register.html')
+    return render_template('ethics_approval.html')
 
 
 @blueprint.route('/store')
